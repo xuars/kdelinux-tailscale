@@ -1,7 +1,7 @@
-systemctl stop tailscaled
-systemctl disable tailscaled
-rm /etc/systemd/system/tailscaled.service
-rm /etc/default/tailscaled
-rm /etc/profile.d/tailscale.sh
-rm /etc/atomic-update.conf.d/tailscale.conf
-rm -rf /opt/tailscale/tailscale
+#!/usr/bin/env bash
+sudo systemctl stop tailscaled
+sudo systemctl disable tailscaled
+sudo rm /etc/systemd/system/tailscaled.service
+sudo rm /etc/default/tailscaled
+sudo rm /etc/profile.d/tailscale.sh
+sudo rm -rf /opt/tailscale/tailscale

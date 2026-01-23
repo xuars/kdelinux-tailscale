@@ -1,15 +1,15 @@
 # Tailscale on KDE Linux
 
 > [!WARNING] 
-> This is an UNOFFICIAL Tailscale installation script
-> Most of the script is written by AI, but reviewed by a human
+> This is an UNOFFICIAL Tailscale installation script. 
+> Most of the script is written by AI, but reviewed by a human. 
 > Proceed with caution
 
 This script is derived from the [original guide](https://github.com/tailscale-dev/deck-tailscale).
 
 ## Installing Tailscale
 
-1. Clone this repo to your Deck, switch to root and enter the directory:
+1. Clone this repo to your system, switch to root and enter the directory:
    1. `git clone https://github.com/xuars/kdelinux-tailscale.git ~/kdelinux-tailscale`
    2. `cd ~/kdelinux-tailscale` 
 2. Run `chmod +x ./*.sh && sudo ./install.sh` to install Tailscale

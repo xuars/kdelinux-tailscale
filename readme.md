@@ -2,7 +2,7 @@
 
 > [!WARNING] 
 > This is an UNOFFICIAL Tailscale installation script. 
-> Most of the script is written by AI, but reviewed by a human. 
+> Part of the script is written by AI, but reviewed by a human. 
 > Proceed with caution
 
 This script is derived from the [original guide](https://github.com/tailscale-dev/deck-tailscale).

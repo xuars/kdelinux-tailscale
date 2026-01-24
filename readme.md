@@ -9,22 +9,35 @@ This script is derived from the [original guide](https://github.com/tailscale-de
 
 ## Installing Tailscale
 
-1. Clone this repo to your system:
-   1. `git clone https://github.com/xuars/kdelinux-tailscale.git ~/kdelinux-tailscale`
-   2. `cd ~/kdelinux-tailscale` 
-2. Run `chmod +x ./*.sh && sudo ./install.sh` to install Tailscale
-3. Run `source /etc/profile.d/tailscale.sh` to put the binaries in your path
-4. Run `tailscale up --qr` to have Tailscale generate
-   a login QR code.
+   ```bash
+   git clone https://github.com/xuars/kdelinux-tailscale.git ~/kdelinux-tailscale
+   cd ~/kdelinux-tailscale
+
+   chmod +x ./*.sh 
+   sudo ./install.sh
+
+   source /etc/profile.d/tailscale.sh # adds Tailscale to PATH without needing to reboot 
+   tailscale up --qr
+   ```
+> [!TIP]
+> The script automatically sets your user to be the tailscale operator, letting you run `tailscale` commands without sudo
 
 ## Updating Tailscale
 
 Tailscale should be able to update itself now! Try running
 `sudo tailscale update`, and if that works, `sudo tailscale set --auto-update`.
 
+## Known issues
+
+- `sudo tailscale` : `sudo: tailscale: command not found`
+  Tailscale operator is set to the user who runs the installation script.
+  If you need to use it with sudo, run `sudo /opt/tailscale/tailscale`
+   
+
 ## How it works
 
 The Tailscale binaries `tailscale` and `tailscaled` are installed in `/opt/tailscale/`. The Tailscale systemd unit file is installed at `/etc/systemd/system/tailscale.service`. The override file to reconfigure the services `Exec` commands is installed at `/etc/systemd/system/tailscaled.service.d/override.conf`. The defaults file for the variables `PORT` and `FLAGS` is installed at `/etc/default/tailscaled`
 
 The service is then started and enabled via `systemctl`.
+
 

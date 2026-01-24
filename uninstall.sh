@@ -5,4 +5,4 @@ sudo rm /etc/systemd/system/tailscaled.service
 sudo rm -rf /etc/systemd/system/tailscaled.service.d
 sudo rm /etc/default/tailscaled
 sudo rm /etc/profile.d/tailscale.sh
-sudo rm -rf /opt/tailscale/tailscale
+sudo rm -rf /opt/tailscale/

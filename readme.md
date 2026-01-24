@@ -25,7 +25,7 @@ This script is derived from the [original guide](https://github.com/tailscale-de
 ## Updating Tailscale
 
 Tailscale should be able to update itself now! Try running
-`sudo tailscale update`, and if that works, `sudo tailscale set --auto-update`.
+`sudo /opt/tailscale/tailscale update`, and if that works, `tailscale set --auto-update`.
 
 ## Known issues
 
@@ -39,5 +39,6 @@ Tailscale should be able to update itself now! Try running
 The Tailscale binaries `tailscale` and `tailscaled` are installed in `/opt/tailscale/`. The Tailscale systemd unit file is installed at `/etc/systemd/system/tailscale.service`. The override file to reconfigure the services `Exec` commands is installed at `/etc/systemd/system/tailscaled.service.d/override.conf`. The defaults file for the variables `PORT` and `FLAGS` is installed at `/etc/default/tailscaled`
 
 The service is then started and enabled via `systemctl`.
+
 
 

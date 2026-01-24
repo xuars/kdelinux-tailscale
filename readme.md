@@ -9,7 +9,7 @@ This script is derived from the [original guide](https://github.com/tailscale-de
 
 ## Installing Tailscale
 
-   ```bash
+   ```zsh
    git clone https://github.com/xuars/kdelinux-tailscale.git ~/kdelinux-tailscale
    cd ~/kdelinux-tailscale
 
@@ -39,6 +39,7 @@ Tailscale should be able to update itself now! Try running
 The Tailscale binaries `tailscale` and `tailscaled` are installed in `/opt/tailscale/`. The Tailscale systemd unit file is installed at `/etc/systemd/system/tailscale.service`. The override file to reconfigure the services `Exec` commands is installed at `/etc/systemd/system/tailscaled.service.d/override.conf`. The defaults file for the variables `PORT` and `FLAGS` is installed at `/etc/default/tailscaled`
 
 The service is then started and enabled via `systemctl`.
+
 
 
 

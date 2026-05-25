@@ -1,94 +1,81 @@
 #!/usr/bin/env bash
-# set invocation settings:
-# -e: Exit on error
-# -u: Error on unset variables
-# -o pipefail: Catch errors in pipelines
+
 set -eu -o pipefail
 
-# 1. Check for sudo/root privileges
-if [ "$EUID" -ne 0 ]; then
-  echo "Please run this script with sudo or as root."
-  exit 1
-fi
-
-# Identify the real user (the one who called sudo) to set as operator later
-REAL_USER=${SUDO_USER:-$(whoami)}
-
-# save the current directory silently
+# Save the current directory silently
 pushd . > /dev/null
 
-# 2. Create a temporary directory and move into it
+# Make a temporary directory, save the name, and move into it
 dir="$(mktemp -d)"
 cd "${dir}"
 
-echo -n "Getting version..."
-# get info for the latest version of Tailscale
+echo -n "Getting latest Tailscale version..."
 tarball="$(curl -s 'https://pkgs.tailscale.com/stable/?mode=json' | jq -r .Tarballs.amd64)"
 version="$(echo ${tarball} | cut -d_ -f2)"
-echo "got ${version}."
 
-echo "Downloading..."
+echo "Downloading ${version}..."
 wget -q --show-progress -O tailscale.tgz "https://pkgs.tailscale.com/stable/${tarball}"
+echo "Done."
 
-echo -n "Cleaning up existing service..."
-# Stop and disable the systemd service if it exists
-systemctl stop tailscaled 2>/dev/null || true
-systemctl disable tailscaled 2>/dev/null || true
-echo "done."
-
-echo -n "Installing to /opt/tailscale..."
 # extract the tailscale binaries
 tar xzf tailscale.tgz
 tar_dir="$(echo ${tarball} | cut -d. -f1-3)"
+test -d $tar_dir
 
-# Create binaries directory in /opt (persistent on most immutable distros)
-mkdir -p /opt/tailscale
-cp -rf "$tar_dir/tailscale" /opt/tailscale/tailscale
-cp -rf "$tar_dir/tailscaled" /opt/tailscale/tailscaled
 
-# Add binaries to path via profile.d
-if ! test -f /etc/profile.d/tailscale.sh; then
-  echo 'PATH="$PATH:/opt/tailscale"' > /etc/profile.d/tailscale.sh
+echo "Installing..."
+
+# Create binaries directory
+if [[ ! -d /opt/tailscale ]];then
+  sudo mkdir -p /opt/tailscale
 fi
 
-# Copy the systemd file into place
-cp -rf "$tar_dir/systemd/tailscaled.service" /etc/systemd/system/tailscaled.service
+# Install binaries
+sudo cp -rf $tar_dir/tailscale /opt/tailscale/tailscale
+sudo cp -rf $tar_dir/tailscaled /opt/tailscale/tailscaled
 
-# Copy in the defaults file if it doesn't already exist
-if ! test -f /etc/default/tailscaled; then
-  cp -rf "$tar_dir/systemd/tailscaled.defaults" /etc/default/tailscaled
+# Add binaries to PATH
+echo "PATH=$PATH:/opt/tailscale" | sudo tee /etc/environment.d/70-tailscale-path.conf > /dev/null
+
+# Copy the service file
+sudo cp -f $tar_dir/systemd/tailscaled.service /etc/systemd/system/tailscaled.service
+
+# copy the defaults file
+if [[ ! -f /etc/default/tailscaled ]]; then
+  sudo cp -f $tar_dir/systemd/tailscaled.defaults /etc/default/tailscaled
 fi
 
-# 3. Apply Systemd Override
-# This ensures the service uses our /opt paths and handles port/flags correctly
-mkdir -p /etc/systemd/system/tailscaled.service.d
-cat <<EOF > /etc/systemd/system/tailscaled.service.d/override.conf
-[Service]
-ExecStartPre=
-ExecStartPre=/opt/tailscale/tailscaled --cleanup
-ExecStart=
-ExecStart=/opt/tailscale/tailscaled --state=/var/lib/tailscale/tailscaled.state --socket=/run/tailscale/tailscaled.sock --port=\${PORT} \$FLAGS
-ExecStopPost=
-ExecStopPost=/opt/tailscale/tailscaled --cleanup
-EOF
+# Add an ovverride file with updated paths for binaries
+if [[ ! -d /etc/systemd/tailscaled.service.d/ ]];then
+  sudo mkdir -p /etc/systemd/tailscaled.service.d/
+fi
+cat $tar_dir/systemd/tailscaled.service | sed 's/\/usr\/sbin\/tailscaled/\/opt\/tailscale\/tailscaled/g' | sudo tee /etc/systemd/system/tailscaled.service.d/override.conf > /dev/null
 
-# capture the above override file in systemd
-systemctl daemon-reload
-echo "done."
+echo "Done."
 
-# return to original directory and clean up temp files
+# Return to the original directory
 popd > /dev/null
+
+echo "Cleaning downladed artifacts..."
 rm -rf "${dir}"
 
-echo "Starting required services..."
-systemctl enable --now tailscaled
+echo "Enabling (and starting) Tailscale service..."
+# Reload systemd for the new services
+sudo systemctl daemon-reload
+sudo systemctl enable --now tailscaled &>/dev/null || echo "ERROR: Could not enable tailscaled service" && exit 1
 
-# 4. Set operator
-# Give the daemon a moment to initialize the socket
-sleep 2
-echo "Setting operator to $REAL_USER..."
-/opt/tailscale/tailscale set --operator="$REAL_USER"
+echo "Done."
 
-echo "Installation Complete."
-echo "Operator: $REAL_USER"
-echo "If 'tailscale' command is not found, run: source /etc/profile.d/tailscale.sh"
+# Set Tailscale operator to the user who ran the installation (optional)
+if [[ $# -gt 1 ]]; then
+  if [[ $1 == "--set-operator" ]];then
+   echo "Setting $2 to be the Tailscale operator..."
+   sudo /opt/tailscale/tailscale set --operator=$2
+   echo "Done."
+  fi
+fi
+
+echo "Tailscale is installed and running but the binaries are not in your path yet."
+echo "Restart your system to complete the installation"
+
+echo "Finished"

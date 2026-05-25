@@ -2,8 +2,6 @@
 
 > [!WARNING] 
 > This is an UNOFFICIAL Tailscale installation script. 
-> Part of the script is written by AI, but reviewed by a human. 
-> Proceed with caution
 
 This script is derived from the [original guide](https://github.com/tailscale-dev/deck-tailscale).
 
@@ -14,10 +12,10 @@ This script is derived from the [original guide](https://github.com/tailscale-de
    cd ~/kdelinux-tailscale
 
    chmod +x ./*.sh 
-   sudo ./install.sh
+   ./install.sh --set-operator $USER
 
-   source /etc/profile.d/tailscale.sh # adds Tailscale to PATH without needing to reboot 
-   tailscale up --qr
+   # After rebooting the system, you don't need to write the full path
+   /opt/tailscale/tailscale up --qr
    ```
 > [!TIP]
 > The script automatically sets your user to be the tailscale operator, letting you run `tailscale` commands without sudo
@@ -25,13 +23,13 @@ This script is derived from the [original guide](https://github.com/tailscale-de
 ## Updating Tailscale
 
 Tailscale should be able to update itself now! Try running
-`sudo /opt/tailscale/tailscale update`, and if that works, `tailscale set --auto-update`.
+`sudo tailscale update`, and if that works, `tailscale set --auto-update`.
 
 ## Known issues
 
-- `sudo tailscale` : `sudo: tailscale: command not found`
+- ~~`sudo tailscale` : `sudo: tailscale: command not found`
   Tailscale operator is set to the user who runs the installation script.
-  If you need to use it with sudo, run `sudo /opt/tailscale/tailscale`
+  If you need to use it with sudo, run `sudo /opt/tailscale/tailscale`~~ - Fixed. Reinstall Tailscale to permanently fix it.
    
 
 ## How it works

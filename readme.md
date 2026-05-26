@@ -27,7 +27,6 @@ Tailscale should be able to update itself now! Try running
 
 - `sudo tailscale` : `sudo: tailscale: command not found`
   This happens because root account uses a different PATH compared to normal user shells.
-  You can set 
   If you need to use it with sudo, run `sudo /opt/tailscale/tailscale`
    
 

@@ -12,8 +12,8 @@ if [[ -f /etc/profile.d/tailscale.sh ]];then
   sudo rm /etc/profile.d/tailscale.sh
 fi
 
-if [[ -f /etc/environment.d/70-tailscale-path.conf ]];then
-  sudo rm /etc/environment.d/70-tailscale-path.conf
+if [[ -f /etc/profile.d/70-tailscale-path.sh ]];then
+  sudo rm /etc/profile.d/70-tailscale-path.sh
 fi
 
 if [[ -f /etc/systemd/system/tailscaled.service ]];then

@@ -52,7 +52,15 @@ fi
 if [[ ! -d /etc/systemd/system/tailscaled.service.d ]];then
   sudo mkdir -p /etc/systemd/system/tailscaled.service.d
 fi
-cat $tar_dir/systemd/tailscaled.service | sed 's/\/usr\/sbin\/tailscaled/\/opt\/tailscale\/tailscaled/g' | sudo tee /etc/systemd/system/tailscaled.service.d/override.conf > /dev/null
+cat $cat << EOF | sudo tee /etc/systemd/system/tailscaled.service.d/override.conf > /dev/null
+[Service]
+ExecStartPre=
+ExecStartPre=/opt/tailscale/tailscaled --cleanup
+ExecStart=
+ExecStart=/opt/tailscale/tailscaled --state=/var/lib/tailscale/tailscaled.state --socket=/run/tailscale/tailscaled.sock --port=${PORT} $FLAGS
+ExecStopPost=
+ExecStopPost=/opt/tailscale/tailscaled --cleanup
+EOF
 
 echo "Done."
 

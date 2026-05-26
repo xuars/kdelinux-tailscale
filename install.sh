@@ -35,10 +35,7 @@ sudo cp -rf $tar_dir/tailscale /opt/tailscale/tailscale
 sudo cp -rf $tar_dir/tailscaled /opt/tailscale/tailscaled
 
 # Add binaries to PATH
-if [[ ! -d /etc/environment.d ]];then
-  sudo mkdir -p /etc/environment.d
-fi
-echo 'PATH=$PATH:/opt/tailscale' | sudo tee /etc/environment.d/70-tailscale-path.conf > /dev/null
+echo 'PATH=$PATH:/opt/tailscale' | sudo tee /etc/profile.d/70-tailscale-path.sh > /dev/null
 
 # Copy the service file
 sudo cp -f $tar_dir/systemd/tailscaled.service /etc/systemd/system/tailscaled.service

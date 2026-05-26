@@ -11,14 +11,13 @@ This script is derived from the [original guide](https://github.com/tailscale-de
    git clone https://github.com/xuars/kdelinux-tailscale.git ~/kdelinux-tailscale
    cd ~/kdelinux-tailscale
 
-   chmod +x ./*.sh 
-   ./install.sh
+   chmod +x ./*.sh  && ./install.sh && source /etc/profile.d/tailscale.sh
 
    # After rebooting the system, you don't need to write the full path
    sudo /opt/tailscale/tailscale up --qr
    ```
 > [!TIP]
-> Run `sudo tailscale set --operator=$USER` once to be able to run `tailscale` without sudo.
+> Run `sudo /opt/tailscale/tailscale set --operator=$USER` once to be able to run `tailscale` without sudo.
 
 ## Updating Tailscale
 
@@ -27,7 +26,10 @@ Tailscale should be able to update itself now! Try running
 
 ## Known issues
 
-- ~~`sudo tailscale` : `sudo: tailscale: command not found`~~ - Fixed. Reinstall Tailscale to permanently fix it.
+- `sudo tailscale` : `sudo: tailscale: command not found`
+  This happens because root account uses a different PATH compared to normal user shells.
+  You can set 
+  If you need to use it with sudo, run `sudo /opt/tailscale/tailscale`
    
 
 ## How it works

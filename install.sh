@@ -38,7 +38,7 @@ sudo cp -rf $tar_dir/tailscaled /opt/tailscale/tailscaled
 if [[ ! -d /etc/environment.d ]];then
   sudo mkdir -p /etc/environment.d
 fi
-echo "PATH=$PATH:/opt/tailscale" | sudo tee /etc/environment.d/70-tailscale-path.conf > /dev/null
+echo 'PATH=$PATH:/opt/tailscale' | sudo tee /etc/environment.d/70-tailscale-path.conf > /dev/null
 
 # Copy the service file
 sudo cp -f $tar_dir/systemd/tailscaled.service /etc/systemd/system/tailscaled.service
@@ -48,8 +48,8 @@ if [[ ! -f /etc/default/tailscaled ]]; then
   sudo cp -f $tar_dir/systemd/tailscaled.defaults /etc/default/tailscaled
 fi
 
-# Add an ovverride file with updated paths for binaries
-if [[ ! -d /etc/systemd/tailscaled.service.d/ ]];then
+# Add an override file with updated paths for binaries
+if [[ ! -d /etc/systemd/tailscaled.service.d ]];then
   sudo mkdir -p /etc/systemd/tailscaled.service.d
 fi
 cat $tar_dir/systemd/tailscaled.service | sed 's/\/usr\/sbin\/tailscaled/\/opt\/tailscale\/tailscaled/g' | sudo tee /etc/systemd/system/tailscaled.service.d/override.conf > /dev/null

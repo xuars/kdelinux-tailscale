@@ -23,6 +23,11 @@ This script is derived from the [original guide](https://github.com/tailscale-de
 Tailscale should be able to update itself now! Try running
 `sudo tailscale update`, and if that works, `tailscale set --auto-update`.
 
+## Uninstalling Tailscale
+```zsh
+./uninstall.sh
+```
+
 ## Known issues
 
 - `sudo tailscale` : `sudo: tailscale: command not found`

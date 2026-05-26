@@ -49,8 +49,8 @@ if [[ ! -f /etc/default/tailscaled ]]; then
 fi
 
 # Add an override file with updated paths for binaries
-if [[ ! -d /etc/systemd/tailscaled.service.d ]];then
-  sudo mkdir -p /etc/systemd/tailscaled.service.d
+if [ ! -d /etc/systemd/tailscaled.service.d ]];then
+  sudo mkdir -p /etc/systemd/system/tailscaled.service.d
 fi
 cat $tar_dir/systemd/tailscaled.service | sed 's/\/usr\/sbin\/tailscaled/\/opt\/tailscale\/tailscaled/g' | sudo tee /etc/systemd/system/tailscaled.service.d/override.conf > /dev/null
 

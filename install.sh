@@ -52,7 +52,7 @@ fi
 if [[ ! -d /etc/systemd/system/tailscaled.service.d ]];then
   sudo mkdir -p /etc/systemd/system/tailscaled.service.d
 fi
-cat $cat << EOF | sudo tee /etc/systemd/system/tailscaled.service.d/override.conf > /dev/null
+cat $cat << 'EOF' | sudo tee /etc/systemd/system/tailscaled.service.d/override.conf > /dev/null
 [Service]
 ExecStartPre=
 ExecStartPre=/opt/tailscale/tailscaled --cleanup

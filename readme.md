@@ -16,7 +16,7 @@ This script is derived from the [original guide](https://github.com/tailscale-de
    sudo /opt/tailscale/tailscale up --qr
    ```
 > [!TIP]
-> Run `sudo /opt/tailscale/tailscale set --operator=$USER` once to be able to run `tailscale` without sudo.
+> Run `sudo /opt/tailscale/tailscale set --operator=$USER` once to be able to run `tailscale` commands without sudo.
 
 ## Updating Tailscale
 

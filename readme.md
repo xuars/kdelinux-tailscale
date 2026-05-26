@@ -11,7 +11,7 @@ This script is derived from the [original guide](https://github.com/tailscale-de
    git clone https://github.com/xuars/kdelinux-tailscale.git ~/kdelinux-tailscale
    cd ~/kdelinux-tailscale
 
-   chmod +x ./*.sh  && ./install.sh && source /etc/profile.d/tailscale.sh
+   chmod +x ./*.sh  && ./install.sh && source /etc/profile.d/70-tailscale-path.sh
 
    # After rebooting the system, you don't need to write the full path
    sudo /opt/tailscale/tailscale up --qr

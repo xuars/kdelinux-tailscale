@@ -12,13 +12,13 @@ This script is derived from the [original guide](https://github.com/tailscale-de
    cd ~/kdelinux-tailscale
 
    chmod +x ./*.sh 
-   ./install.sh --set-operator $USER
+   ./install.sh
 
    # After rebooting the system, you don't need to write the full path
-   /opt/tailscale/tailscale up --qr
+   sudo /opt/tailscale/tailscale up --qr
    ```
 > [!TIP]
-> The script automatically sets your user to be the tailscale operator, letting you run `tailscale` commands without sudo
+> Run `sudo tailscale set --operator=$USER` once to be able to run `tailscale` without sudo.
 
 ## Updating Tailscale
 
@@ -27,9 +27,7 @@ Tailscale should be able to update itself now! Try running
 
 ## Known issues
 
-- ~~`sudo tailscale` : `sudo: tailscale: command not found`
-  Tailscale operator is set to the user who runs the installation script.
-  If you need to use it with sudo, run `sudo /opt/tailscale/tailscale`~~ - Fixed. Reinstall Tailscale to permanently fix it.
+- ~~`sudo tailscale` : `sudo: tailscale: command not found`~~ - Fixed. Reinstall Tailscale to permanently fix it.
    
 
 ## How it works

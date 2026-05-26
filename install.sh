@@ -77,14 +77,6 @@ sudo systemctl enable --now tailscaled &>/dev/null || echo "ERROR: Could not ena
 
 echo "Done."
 
-# Set Tailscale operator to the user who ran the installation (optional)
-if [[ $# -gt 1 ]]; then
-  if [[ $1 == "--set-operator" ]];then
-   echo "Setting $2 to be the Tailscale operator..."
-   sudo /opt/tailscale/tailscale set --operator=$2
-   echo "Done."
-  fi
-fi
 
 echo "Tailscale is installed and running but the binaries are not in your path yet."
 echo "Restart your system to complete the installation"
